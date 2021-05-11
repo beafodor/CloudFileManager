@@ -1,0 +1,26 @@
+<ion-menu contentId="main" class="menu" menuId="main-menu">
+  <ion-content>
+    <div class="menu-header-bg"></div>
+    <div class="header-content">
+      <ion-label>
+        <h1>CloudFileManager</h1>
+      </ion-label>
+    </div>
+
+    <ion-list class="menu-items" [inset]="true" lines="none">
+      <ion-item
+      [routerLink]="p.url"
+      [class.active-item]="selectedPath === p.url" *ngFor="let p of pages"
+      (click)="onClickMenu()"
+      >
+        <ion-icon [name]="p.icon"></ion-icon>
+        {{ p.title }}
+      </ion-item>
+      <ion-item (click)='logOut()' *ngIf="uid">
+        <ion-icon name="log-out"></ion-icon>
+        Sign out
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+

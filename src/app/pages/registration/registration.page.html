@@ -1,0 +1,78 @@
+<ion-content>
+  <ion-grid style="height: 100%; max-width: 1200px; min-width: 400px;">
+    <ion-row justify-content-center align-items-center style="height: 100%">
+      <ion-col style="width: 1200px;">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Sign Up</ion-card-title>
+            <ion-card-subtitle>Create Yout account by filling up the form below</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="validationFU" (ngSubmit)="signup(validationFU.value)">
+              <ion-item>
+                <ion-label position="floating">Username</ion-label>
+                <ion-input type="text" name="username" formControlName="username"></ion-input>
+              </ion-item>
+              <div>
+                <ng-container *ngFor="let validation of validationMessage.username">
+                  <div class="errormsg" *ngIf="validationFU.get('username').hasError(validation.type) && (validationFU.get('username').dirty || validationFU.get('username').touched)">
+                    {{ validation.message }}
+                  </div>
+                </ng-container>
+              </div>
+              <ion-item>
+                <ion-label position="floating">Email</ion-label>
+                <ion-input type="text" name="email" formControlName="email"></ion-input>
+              </ion-item>
+              <div>
+                <ng-container *ngFor="let validation of validationMessage.email">
+                  <div class="errormsg" *ngIf="validationFU.get('email').hasError(validation.type) && (validationFU.get('email').dirty || validationFU.get('email').touched)">
+                    {{ validation.message }}
+                  </div>
+                </ng-container>
+              </div>
+              <ion-item>
+                <ion-label position="floating">Password</ion-label>
+                <ion-input type="password" name="password" formControlName="password"></ion-input>
+              </ion-item>
+              <div>
+                <ng-container *ngFor="let validation of validationMessage.password">
+                  <div class="errormsg" *ngIf="validationFU.get('password').hasError(validation.type) && (validationFU.get('password').dirty || validationFU.get('password').touched)">
+                    {{ validation.message }}
+                  </div>
+                </ng-container>
+              </div>
+              <ion-item>
+                <ion-label position="floating">Confirm Password</ion-label>
+                <ion-input type="password" name="cpassword" formControlName="cpassword"></ion-input>
+              </ion-item>
+              <div>
+                <ng-container *ngFor="let validation of validationMessage.cpassword">
+                  <div class="errormsg" *ngIf="validationFU.get('cpassword').hasError(validation.type) && (validationFU.get('cpassword').dirty || validationFU.get('cpassword').touched)">
+                    {{ validation.message }}
+                  </div>
+                </ng-container>
+              </div>
+              <ion-row>
+                <ion-col width-50 style="text-align: center">
+                  <ion-button class="signinbtn" fill="solid" shape="round" expand="contain" color="primary" type="submit" [disabled]="!validationFU.valid">Sign Up</ion-button>
+                </ion-col>
+              </ion-row>
+            </form>
+            <div class="text">
+              <span>Or Sign In Via Google</span>
+            </div>
+            <ion-row>
+              <ion-col width-50 style="text-align: center">
+                <ion-button class="googlebtn" fill="solid" shape="round" expand="contain" color="danger" (click)="loginService.GoogleLogin()"><ion-icon name="logo-google"></ion-icon></ion-button>
+              </ion-col>
+            </ion-row>
+            <div class="text">
+              <span>If You already have an account. <a routerLink="../login">Login</a></span>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

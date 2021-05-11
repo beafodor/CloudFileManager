@@ -1,0 +1,165 @@
+
+<ion-content [fullscreen]="true" *ngIf="userId">
+  <ion-grid style="max-height: 100%; max-width: 1200px; min-width: 400px; display: flex;">
+    <ion-row justify-content-center align-items-center style="height: 70%; display: flex;">
+      <ion-col style="width: 50%; min-width: 400px; flex: 1;">
+        <ion-card>
+          <ion-card-header>
+            <ion-toolbar *ngIf="platformType === 'desktop'">
+              <ion-title text-align="center">Files</ion-title>
+              <ion-buttons slot="end">
+                <ion-button (click)="clickCreate()">
+                  <ion-icon name="folder" slot="start"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+            <ion-card-title *ngIf="platformType === 'android'">Files</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content *ngIf="platformType === 'android'">
+            <ion-list class="relevantContent" [inset]="true">
+              <ion-item (click)='goBack()' *ngIf="!(folder === actualFolder)">
+                <ion-icon name="folder" slot="start"></ion-icon>
+                <ion-label text-wrap>
+                  <p>..</p>
+                </ion-label>
+              </ion-item>
+              <ion-text color="medium" *ngIf="cloudFiles.length == 0" class="ion-padding ion-text">
+                <p>No documents found here</p>
+              </ion-text>
+              <ion-item-sliding *ngFor="let f of cloudFiles">
+                <ion-item (click)='clickDir(f)'>
+                  <ion-icon name="folder" slot="start" *ngIf="f.isDirectory"></ion-icon>
+                  <ion-icon name="document" slot="start" *ngIf="!f.isDirectory"></ion-icon>
+                  <ion-label text-wrap>
+                    {{ f.name }}
+                  </ion-label>
+                </ion-item>
+
+                <ion-item-options side="start" (click)='clickDel(f)'>
+                  <ion-item-option color="danger">
+                    <ion-icon name="trash" slot="icon-only"></ion-icon>
+                  </ion-item-option>
+                </ion-item-options>
+
+                <ion-item-options side="end" (click)='clickDownload(f)'>
+                  <ion-item-option color="primary">
+                    <ion-icon name="cloud-download-outline" slot="icon-only"></ion-icon>
+                  </ion-item-option>
+                  <ion-item-option side="end" (click)='clickShare(f)'>
+                    <ion-icon name="share-social" slot="icon-only"></ion-icon>
+                  </ion-item-option>
+                </ion-item-options>
+              </ion-item-sliding>
+            </ion-list>
+          </ion-card-content>
+
+          <ion-card-content *ngIf="platformType === 'desktop'">
+            <ion-list class="relevantContent" [inset]="true">
+              <ion-item (click)='goBack()' *ngIf="!(folder === actualFolder)">
+                <ion-icon name="folder" slot="start"></ion-icon>
+                <ion-label text-wrap>
+                  <p>..</p>
+                </ion-label>
+              </ion-item>
+              <ion-text color="medium" *ngIf="cloudFiles.length == 0" class="ion-padding ion-text">
+                <p>No documents found here</p>
+              </ion-text>
+              <div *ngFor="let f of sortedFiles">
+                <ion-item (click)='clickDir(f)'>
+                  <ion-icon name="folder" slot="start" *ngIf="f.isDirectory"></ion-icon>
+                  <ion-icon name="document" slot="start" *ngIf="!f.isDirectory"></ion-icon>
+                    <ion-label text-wrap>
+                      {{ f.name }}
+                    </ion-label>
+                    <ion-buttons slot="end">
+                      <ion-button (click)='clickDel(f)'>
+                        <ion-icon name="trash" slot="start"></ion-icon>
+                      </ion-button>
+                      <ion-button (click)='clickShare(f)'>
+                        <ion-icon name="share-social"></ion-icon>
+                      </ion-button>
+                    </ion-buttons>
+                </ion-item>
+              </div>
+            </ion-list>
+            <ion-buttons *ngIf="maxPage > 1">
+              <ion-button [disabled]="page != 0">
+                <ion-icon name="chevron-backward"></ion-icon>
+              </ion-button>
+              <ion-button [disabled]="page != maxPage">
+                <ion-icon name="chevron-forward"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col style="width: 50%; min-width: 400px; max-height: 600px; flex: 1;" *ngIf="platformType === 'desktop'">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title class="dropTitle">
+              Drop Your Files That You Want To Upload!
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="dropzone-card">
+            <div class="dropzone" app-dropzone
+            (hovered)="toggleHover($event)"
+            (dropped)="onDrop($event)"
+            [class.hovering]="isHovering">
+              <h1>Or</h1>
+              <input type="file" (change)="detectFiles($event)" multiple>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf='platformType === "android"'>
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="clickUpload()">
+        <ion-icon name="cloud-upload-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="clickCreate()">
+        <ion-icon name="folder"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>
+
+<ion-footer transculent="true" *ngIf="upload.isOn" class="footer">
+  <ion-grid style="max-height: 30%; max-width: 1200px;">
+    <ion-row justify-content-center align-items-center>
+      <ion-col>
+        <ion-card horizontal="end" position="fixed" class="footer-card">
+          <ion-card-header>
+            <ion-card-title>Upload</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="footerContent" *ngIf="upload.percentage | async as pct">
+              <progress [value] = "pct" max="100"></progress>
+              {{ pct | number }}%
+            </div>
+
+            <div class="footerContent" *ngIf="upload.snapshot | async as snap">
+              {{ snap.bytesTransferred }} of {{ snap.totalBytes }}
+
+              <div *ngIf="upload.isDone(snap) && upload.downloadURL as url">
+                <p>Done!</p>
+                <ion-button href="url" target="_blank" rel="noopener">Download</ion-button>
+              </div><br>
+              <ion-button (click)="upload.task.pause()" [hidden]="!upload.isActive(snap)" [disabled]="!upload.isActive(snap)">Pause</ion-button>
+              <ion-button (click)="upload.task.resume()" [hidden]="!(snap?.state === 'paused')" [disabled]="!(snap?.state === 'paused')">Resume</ion-button>
+              <ion-button (click)="upload.task.cancel()" (click)="upload.isOn=false">Cancel</ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
+

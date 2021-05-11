@@ -1,0 +1,56 @@
+<ion-content fixed>
+  <ion-grid style="height: 100%; max-width: 1200px; min-width: 400px;">
+    <ion-row justify-content-center align-items-center style="height: 100%">
+      <ion-col style="width: 1200px;">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Welcome</ion-card-title>
+            <ion-card-subtitle>Please Login to Your account!</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="validationFU" (ngSubmit)="clickLogin(validationFU.value)">
+              <ion-item>
+                <ion-label position="floating">Email</ion-label>
+                <ion-input type="text" name="email" [(ngModel)]="email" formControlName="email"></ion-input>
+              </ion-item>
+              <div>
+                <ng-container *ngFor="let validation of validationMessage.email">
+                  <div class="errormsg" *ngIf="validationFU.get('email').hasError(validation.type) && (validationFU.get('email').dirty || validationFU.get('email').touched)">
+                    {{ validation.message }}
+                  </div>
+                </ng-container>
+              </div>
+              <ion-item>
+                <ion-label position="floating">Password</ion-label>
+                <ion-input type="password" name="password" [(ngModel)]="password" formControlName="password"></ion-input>
+              </ion-item>
+              <div>
+                <ng-container *ngFor="let validation of validationMessage.password">
+                  <div class="errormsg" *ngIf="validationFU.get('password').hasError(validation.type) && (validationFU.get('password').dirty || validationFU.get('password').touched)">
+                    {{ validation.message }}
+                  </div>
+                </ng-container>
+              </div>
+              <ion-row>
+                <ion-col width-50 style="text-align: center">
+                  <ion-button class="loginbtn" type="submit" fill="solid" shape="round" expand="contain" color="primary" [disabled]="!validationFU.valid">Login</ion-button>
+                </ion-col>
+              </ion-row>
+            </form>
+            <div class="text">
+              <span>Or Sign In Via Google</span>
+            </div>
+            <ion-row>
+              <ion-col width-50 style="text-align: center">
+                <ion-button class="googlebtn" fill="solid" shape="round" expand="contain" color="danger" (click)="clickGoogle()"><ion-icon name="logo-google"></ion-icon></ion-button>
+              </ion-col>
+            </ion-row>
+            <div class="text">
+              <span>Don't have an account yet? <a routerLink="../registration">Sign Up</a></span>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

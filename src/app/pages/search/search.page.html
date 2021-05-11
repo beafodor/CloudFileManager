@@ -1,0 +1,28 @@
+<ion-content *ngIf="userId">
+  <ion-grid style="height: 100%; max-width: 1200px; min-width: 400px;">
+    <ion-row justify-content-center align-items-center style="height: 100%">
+      <ion-col style="width: 1200px;">
+        <ion-card>
+          <ion-card-header>
+            <ion-item lines="none">
+              <ion-label slot="start">Searching by...</ion-label>
+              <ion-select slot="end" interface="popover" multiple [(ngModel)]="searchMethod">
+                <ion-select-option value="username">username</ion-select-option>
+                <ion-select-option value="email">email</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-searchbar showcancelbutton="" (ionInput)="listUsers($event)"></ion-searchbar>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item *ngFor="let user of userList" lines="none" (click)="goToUserProfile(user.uid)">
+                <ion-icon slot="start" name="person"></ion-icon>
+                <p slot="start">{{ user.username }}</p><p slot="end">{{ user.email }}</p>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,81 @@
+<ion-content fixed *ngIf="user">
+  <ion-grid style="height: 100%; max-width: 1200px; min-width: 400px;">
+    <ion-row justify-content-center align-items-center style="height: 20%" class="profile-header">
+      <ion-col style="width: 1200px;">
+        <ion-card class="profile">
+          <ion-card-content>
+            <ion-avatar>
+              <img src="assets\user.png">
+            </ion-avatar>
+            <h2>{{ user.username }}</h2>
+            <h3>{{ user.email }}</h3>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row justify-content-center align-items-center style="height: 80%" class="profile-content">
+      <ion-col style="width: 600px;">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title><ion-icon name="stats-chart"></ion-icon>Statistics</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item *ngIf="ownFiles">
+              Total number of your uploaded files: {{ ownFiles.length }}
+            </ion-item>
+            <ion-item>
+              Total MB of your uploaded files: MB
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col style="width: 600px;">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title><ion-icon name="settings"></ion-icon>Manage Profile</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list class="menu-items">
+              <ion-item>
+                <ion-button>
+                  <ion-icon name="camera"></ion-icon>
+                  Change profilepicture
+                </ion-button>
+              </ion-item>
+              <ion-item>
+                <ion-button (click)="changeUsername()">
+                  <ion-icon name="person-circle"></ion-icon>
+                  Change username
+                </ion-button>
+              </ion-item>
+              <ion-item>
+                <ion-button (click)="changePassword()">
+                  <ion-icon name="lock-closed"></ion-icon>
+                  Change password
+                </ion-button>
+              </ion-item>
+              <ion-item>
+                <ion-button (click)="setProfilePrivacy()">
+                  <ion-icon name="people-circle"></ion-icon>
+                  Set Profile Privacy
+                </ion-button>
+              </ion-item>
+              <ion-item>
+                <ion-button color="danger" (click)="clearStorage()">
+                  <ion-icon name="trash"></ion-icon>
+                  Clear storage
+                </ion-button>
+              </ion-item>
+              <ion-item>
+                <ion-button color="danger" (click)="deleteProfile()">
+                  <ion-icon name="trash"></ion-icon>
+                  Delete profile
+                </ion-button>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
