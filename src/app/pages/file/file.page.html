@@ -1,9 +1,9 @@
 
 <ion-content [fullscreen]="true" *ngIf="userId">
-  <ion-grid style="max-height: 100%; max-width: 1200px; min-width: 400px; display: flex;">
-    <ion-row justify-content-center align-items-center style="height: 70%; display: flex;">
-      <ion-col style="width: 50%; min-width: 400px; flex: 1;">
-        <ion-card>
+  <ion-grid style="height: calc(100vh - 80px); max-width: 1200px; min-width: 400px; display: flex;">
+    <ion-row justify-content-center align-items-center class="pageWrapper">
+      <ion-col class="filesListWrapper">
+        <ion-card class="fileCard">
           <ion-card-header>
             <ion-toolbar *ngIf="platformType === 'desktop'">
               <ion-title text-align="center">Files</ion-title>
@@ -65,7 +65,7 @@
               <ion-text color="medium" *ngIf="cloudFiles.length == 0" class="ion-padding ion-text">
                 <p>No documents found here</p>
               </ion-text>
-              <div *ngFor="let f of sortedFiles">
+              <div *ngFor="let f of cloudFiles">
                 <ion-item (click)='clickDir(f)'>
                   <ion-icon name="folder" slot="start" *ngIf="f.isDirectory"></ion-icon>
                   <ion-icon name="document" slot="start" *ngIf="!f.isDirectory"></ion-icon>
@@ -94,7 +94,7 @@
           </ion-card-content>
         </ion-card>
       </ion-col>
-      <ion-col style="width: 50%; min-width: 400px; max-height: 600px; flex: 1;" *ngIf="platformType === 'desktop'">
+      <ion-col class="dropZoneWrapper" *ngIf="platformType === 'desktop'">
         <ion-card>
           <ion-card-header>
             <ion-card-title class="dropTitle">
@@ -141,20 +141,20 @@
           </ion-card-header>
           <ion-card-content>
             <div class="footerContent" *ngIf="upload.percentage | async as pct">
-              <progress [value] = "pct" max="100"></progress>
-              {{ pct | number }}%
+              <progress [value] = "pct" max="100" style="width: 100%; height: 20px;"></progress>
+              <p style="width: 100%; text-align: center;">{{ pct | number }}% ({{ (upload.snapshot | async)?.bytesTransferred }} of {{ (upload.snapshot | async)?.totalBytes }})</p>
             </div>
 
             <div class="footerContent" *ngIf="upload.snapshot | async as snap">
-              {{ snap.bytesTransferred }} of {{ snap.totalBytes }}
-
               <div *ngIf="upload.isDone(snap) && upload.downloadURL as url">
-                <p>Done!</p>
-                <ion-button href="url" target="_blank" rel="noopener">Download</ion-button>
+                <p style="width: 100%; text-align: center; font-size: 18px; color: white;"><b>Done!</b></p>
               </div><br>
-              <ion-button (click)="upload.task.pause()" [hidden]="!upload.isActive(snap)" [disabled]="!upload.isActive(snap)">Pause</ion-button>
-              <ion-button (click)="upload.task.resume()" [hidden]="!(snap?.state === 'paused')" [disabled]="!(snap?.state === 'paused')">Resume</ion-button>
-              <ion-button (click)="upload.task.cancel()" (click)="upload.isOn=false">Cancel</ion-button>
+              <div style="width: 100%; padding: 0 30px;">
+                <ion-button href="url" target="_blank" rel="noopener" [hidden]="!upload.isDone(snap)">Download</ion-button>
+                <ion-button (click)="upload.task.pause()" [hidden]="!upload.isActive(snap)" [disabled]="!upload.isActive(snap)">Pause</ion-button>
+                <ion-button (click)="upload.task.resume()" [hidden]="!(snap?.state === 'paused')" [disabled]="!(snap?.state === 'paused')">Resume</ion-button>
+                <ion-button style="float: right;" (click)="upload.task.cancel()" (click)="upload.isOn=false">Cancel</ion-button>
+              </div>
             </div>
           </ion-card-content>
         </ion-card>

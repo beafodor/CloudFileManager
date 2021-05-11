@@ -96,7 +96,7 @@ export class FilePage implements OnInit {
 
   fileSort() {
     this.maxPage = Math.ceil(this.cloudFiles.length / 6);
-    this.cloudFiles.sort((a, b) => a.name.localCompare(b.name));
+    this.cloudFiles.sort((a, b) => a["name"].localCompare(b["name"]));
     this.sortedFiles = this.cloudFiles.slice(this.page * this.maxElement, (this.page+1) * this.maxElement);
     console.log(this.cloudFiles);
     console.log(this.sortedFiles);

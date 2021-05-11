@@ -115,6 +115,7 @@ ion-toolbar {
 
 .dropzone-card {
   display: flex;
+  height: calc(100% - 130px);
 
   div {
     position: relative;
@@ -147,4 +148,32 @@ ion-toolbar {
     margin-top: 0;
     padding-top: 0;
   }
+}
+
+.filesListWrapper {
+  position: relative;
+  width: 50%;
+  min-width: 400px;
+  max-height: 100%;
+  padding-bottom: 50px;
+  height: 100%;
+}
+
+.dropZoneWrapper {
+  position: relative;
+  width: 50%;
+  min-width: 400px;
+  height: 100%;
+  max-height: 100%;
+  padding-bottom: 50px;
+}
+
+.pageWrapper {
+  position: relative;
+  display: flex;
+  flex: 1;
+}
+
+filesCard {
+  overflow-y: scroll;
 }
