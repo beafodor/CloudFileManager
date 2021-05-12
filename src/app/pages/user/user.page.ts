@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { ManageService } from 'src/app/services/manage/manage.service';
 import { PlatformService } from 'src/app/services/platform/platform.service';
 import { ClipboardService } from 'ngx-clipboard';
+import { DownloadService } from 'src/app/services/download/download.service';
 
 @Component({
   selector: 'app-user',
@@ -32,7 +33,8 @@ export class UserPage implements OnInit {
     private db: AngularFirestore,
     public manage: ManageService,
     public platform: PlatformService,
-    private clipboardApi: ClipboardService
+    private clipboardApi: ClipboardService,
+    public download: DownloadService
   ) { }
 
   ngOnInit() {
@@ -60,10 +62,18 @@ export class UserPage implements OnInit {
 
   clickShare(f) {
     if(this.platformType === "android") {
-      this.manage.shareNative(f);
+      this.manage.shareNative(f, f.downloadURL);
     } else {
-      this.clipboardApi.copyFromContent(f);
+      this.clipboardApi.copyFromContent(f.downloadURL);
     }
+  }
+
+  clickItem(f) {
+    window.open(f.downloadURL, '_system');
+  }
+
+  clickDownload(f) {
+    this.download.downloadFile(f.downloadURL);
   }
 
   setUserMail() {

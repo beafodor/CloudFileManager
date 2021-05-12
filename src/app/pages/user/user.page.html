@@ -5,7 +5,7 @@
         <ion-card class="profile">
           <ion-card-content>
             <ion-avatar>
-              <img src="assets\user.png">
+              <ion-img [src]="searchedUser.photoURL" onerror="this.onerror=null;this.src='assets/user.png'"></ion-img>
             </ion-avatar>
             <h2>{{ searchedUser.username }}</h2>
             <h3>{{ searchedUser.email }}</h3>
@@ -37,36 +37,38 @@
             </ion-card-header>
             <ion-card-content>
               <div *ngIf="platformType === 'desktop'">
-                <ion-item *ngFor="let file of publicFiles">
-                  <ion-icon name="document"></ion-icon>
-                  <ion-label text-wrap>
-                    {{ file.name }}
-                  </ion-label>
-                  <ion-buttons slot="end">
-                    <ion-button (click)='clickDownload(f)'>
-                      <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
-                    </ion-button>
-                    <ion-button (click)='clickShare(f)'>
-                      <ion-icon name="share-social"></ion-icon>
-                    </ion-button>
-                  </ion-buttons>
-                </ion-item>
+                <div *ngFor="let file of publicFiles">
+                  <ion-item>
+                    <ion-icon name="document"></ion-icon>
+                    <ion-label (click)='clickItem(file)'>
+                      {{ file.name }}
+                    </ion-label>
+                    <ion-buttons slot="end">
+                      <ion-button (click)='clickDownload(file)'>
+                        <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
+                      </ion-button>
+                      <ion-button (click)='clickShare(file)'>
+                        <ion-icon name="share-social"></ion-icon>
+                      </ion-button>
+                    </ion-buttons>
+                  </ion-item>
+                </div>
               </div>
               <div *ngIf="platformType === 'android'">
                 <ion-item-sliding *ngFor="let file of publicFiles">
-                  <ion-item >
+                  <ion-item (click)="clickItem(file)">
                     <ion-icon name="document"></ion-icon>
                     <ion-label text-wrap>
                       {{ file.name }}
                     </ion-label>
                   </ion-item>
-                  <ion-item-options side="end" (click)='clickDownload(f)'>
+                  <ion-item-options side="end" (click)='clickDownload(file)'>
                     <ion-item-option color="primary">
                       <ion-icon name="cloud-download-outline" slot="icon-only"></ion-icon>
                     </ion-item-option>
                   </ion-item-options>
 
-                  <ion-item-option side="end" (click)='clickShare(f)'>
+                  <ion-item-option side="end" (click)='clickShare(file)'>
                     <ion-icon name="share-social" slot="icon-only"></ion-icon>
                   </ion-item-option>
                 </ion-item-sliding>
@@ -84,7 +86,7 @@
           </ion-card-header>
           <ion-card-content>
             <ion-label>
-              Ask the user to set profile privacy
+              Ask the user to set profile to public
             </ion-label><br>
             <ion-button>
               <ion-icon name="mail"></ion-icon>

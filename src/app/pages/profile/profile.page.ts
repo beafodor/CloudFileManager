@@ -4,6 +4,8 @@ import { AlertController } from '@ionic/angular';
 import { Users } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import firebase from 'firebase/app';
+import { PlatformService } from 'src/app/services/platform/platform.service';
+import { UploadService } from 'src/app/services/upload/upload.service';
 
 @Component({
   selector: 'app-profile',
@@ -18,28 +20,30 @@ export class ProfilePage implements OnInit {
   size: number;
   newUser: Users;
   user: any;
-  data: any;
+  userData: any;
   ownFiles :any[];
+  photo: File;
 
   constructor(
     public auth: AuthService,
     private alertCtrl: AlertController,
-    private db: AngularFirestore
+    private db: AngularFirestore,
+    public platform: PlatformService,
+    public upload: UploadService
   ) {}
 
   ngOnInit() {
     this.auth.getCurrentUser().subscribe(async (res) => {
-      this.user = res.data();
-      await this.getStats();
+      this.user = await res.data();
+      this.getStats();
     });
   }
 
   getStats() {
     console.log(this.user.uid)
-    this.db.collection('files', ref => ref.where("uid", "==", this.user.id)).valueChanges().subscribe(res => {
-      console.log(res);
+    this.db.collection('files', ref => ref.where("uid", "==", this.uid)).valueChanges().subscribe(res => {
+      this.ownFiles = res;
     });
-    console.log(this.data);
   }
 
 
@@ -67,13 +71,15 @@ export class ProfilePage implements OnInit {
               email: this.user.email,
               uid: this.user.uid,
               username: data.username,
-              isPublic: this.user.isPublic
+              isPublic: this.user.isPublic,
+              photoURL: this.user.photoURL
             });
             this.newUser = {
               email: this.user.email,
               uid: this.user.uid,
               username: data.username,
-              isPublic: this.user.isPublic
+              isPublic: this.user.isPublic,
+              photoURL: this.user.photoURL
             };
             this.auth.setUser(this.newUser);
             const currentUser = firebase.auth().currentUser;
@@ -152,14 +158,16 @@ export class ProfilePage implements OnInit {
               email: this.user.email,
               isPublic: privacy,
               uid: this.user.uid,
-              username: this.user.username
+              username: this.user.username,
+              photoURL: this.user.photoURL
             });
             console.log(userProfile);
             this.newUser = {
               email: this.user.email,
               isPublic: privacy,
               uid: this.user.uid,
-              username: this.user.username
+              username: this.user.username,
+              photoURL: this.user.photoURL
             };
             this.user = this.newUser;
           }
@@ -169,7 +177,7 @@ export class ProfilePage implements OnInit {
     await alert.present();
   }
 
-  async clearStorage() {
+  /*async clearStorage() {
     let alert = await this.alertCtrl.create({
       header: 'Clear Storage',
       message: 'Are You sure that you want to clear Your storage? All files will be deleted',
@@ -188,7 +196,7 @@ export class ProfilePage implements OnInit {
       ]
     });
     await alert.present();
-  }
+  }*/
 
   async deleteProfile() {
     let alert = await this.alertCtrl.create({
@@ -213,5 +221,17 @@ export class ProfilePage implements OnInit {
       ]
     });
     await alert.present();
+  }
+
+  changePhoto() {
+    this.upload.choosePhoto(this.user.uid);
+    window.location.reload();
+  }
+
+  async changePhotoWeb(event) {
+    this.photo = event.target.files;
+    console.log(this.photo)
+    this.upload.uploadToFirebasePhotoWeb(this.photo[0], await this.user.uid);
+    window.location.reload();
   }
 }

@@ -89,7 +89,6 @@ export class SidebarComponent implements OnInit {
   logOut() {
     try {
       this.auth.signOut();
-      this.guard.loggedIn = false;
       this.getItems();
     } catch (error) {
      console.log(error);

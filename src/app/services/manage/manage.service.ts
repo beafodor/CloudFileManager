@@ -72,10 +72,10 @@ export class ManageService {
     await alert.present();
   }
 
-  shareNative(f) {
+  shareNative(f, url) {
     this.clipboard.clear();
     if(f.isPublic) {
-      this.clipboard.copy(f.url);
+      this.clipboard.copy(url);
       this.toast.create({
         message: "This file's download url copied to clipboard",
         duration: 3000,

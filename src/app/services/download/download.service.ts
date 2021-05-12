@@ -4,6 +4,7 @@ import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ng
 
 import { AngularFireStorage } from '@angular/fire/storage';
 import '@firebase/storage';
+import { PlatformService } from '../platform/platform.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,15 +16,20 @@ export class DownloadService {
 
   constructor(
     private storage: AngularFireStorage,
-    private transfer: FileTransfer
+    private transfer: FileTransfer,
+    public platform: PlatformService
   ) { }
 
-  downloadFile(f) {
-    console.log(f);
-    const ref = this.storage.ref('/' + f.path);
-    const url = ref.getDownloadURL().toString();
+  downloadFile(url) {
     try {
-      this.fileTransfer.download(url, 'files/downloads/' + f.name);
+      console.log(url);
+      const xhr = new XMLHttpRequest();
+      xhr.responseType = 'blob';
+      xhr.onload = (event) => {
+        let blob = xhr.response;
+      };
+      xhr.open('GET', url);
+      xhr.send();
     } catch (error) {
       console.log(error);
     }

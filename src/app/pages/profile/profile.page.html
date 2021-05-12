@@ -5,7 +5,7 @@
         <ion-card class="profile">
           <ion-card-content>
             <ion-avatar>
-              <img src="assets\user.png">
+              <ion-img [src]="user.photoURL" onerror="this.onerror=null;this.src='assets/user.png'"></ion-img>
             </ion-avatar>
             <h2>{{ user.username }}</h2>
             <h3>{{ user.email }}</h3>
@@ -36,8 +36,15 @@
           </ion-card-header>
           <ion-card-content>
             <ion-list class="menu-items">
-              <ion-item>
-                <ion-button>
+              <ion-item *ngIf="platform.getPlatformType()==='desktop'">
+                <input style="display: none" type="file" accept="image/jpeg" (change)="changePhotoWeb($event)" #hiddenfileinput>
+                <ion-button (click)="hiddenfileinput.click()">
+                  <ion-icon name="camera"></ion-icon>
+                  Change profilepicture
+                </ion-button>
+              </ion-item>
+              <ion-item *ngIf="platform.getPlatformType()==='android'">
+                <ion-button (click)="changePhoto()">
                   <ion-icon name="camera"></ion-icon>
                   Change profilepicture
                 </ion-button>
@@ -60,12 +67,12 @@
                   Set Profile Privacy
                 </ion-button>
               </ion-item>
-              <ion-item>
+              <!--ion-item>
                 <ion-button color="danger" (click)="clearStorage()">
                   <ion-icon name="trash"></ion-icon>
                   Clear storage
                 </ion-button>
-              </ion-item>
+              </ion-item-->
               <ion-item>
                 <ion-button color="danger" (click)="deleteProfile()">
                   <ion-icon name="trash"></ion-icon>

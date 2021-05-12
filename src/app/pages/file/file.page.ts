@@ -13,6 +13,8 @@ import * as _ from "lodash";
 import { DownloadService } from 'src/app/services/download/download.service';
 import { ChunkService } from 'src/app/services/chunk/chunk.service';
 import { ClipboardService } from 'ngx-clipboard';
+import { NotificationsService } from 'src/app/services/notifications/notifications.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-file',
@@ -47,7 +49,9 @@ export class FilePage implements OnInit {
     public manage: ManageService,
     public download : DownloadService,
     public chunk: ChunkService,
-    private clipboardApi: ClipboardService
+    private clipboardApi: ClipboardService,
+    public notifyService: NotificationsService,
+    private alertCtrl: AlertController
   ) {}
 
   ngOnInit() {
@@ -213,7 +217,7 @@ export class FilePage implements OnInit {
   }
 
   async clickDownload(f) {
-    await this.download.downloadFile(f);
+    await this.download.downloadFile(f.url);
   }
 
   //nav back between folders
@@ -225,11 +229,38 @@ export class FilePage implements OnInit {
   }
 
   //nav forward between folders
-  clickDir(d) {
-    if(d.isDirectory) {
-      this.previous = d.name;
-      this.actualFolder = '/' + d.fullPath.slice(0, -1);
+  async clickItem(f) {
+    if(f.isDirectory) {
+      this.previous = f.name;
+      this.actualFolder = '/' + f.fullPath.slice(0, -1);
       this.loadFiles();
+    } else {
+      let alert = await this.alertCtrl.create({
+        header: 'What do you want to do?',
+        message: 'What do you want to do with this file?',
+        buttons: [
+          {
+            text: 'Open',
+            cssClass: 'secondary',
+            handler: () => {
+              window.open(f.url, '_system');
+            }
+          },
+          {
+            text: 'Download',
+            cssClass: 'secondary',
+            handler: () => {
+              this.download.downloadFile(f.url);
+            }
+          },
+          {
+            text: 'Cancel',
+            cssClass: 'danger',
+            role: 'cancel'
+          }
+        ]
+      });
+      await alert.present();
     }
   }
 
@@ -247,9 +278,10 @@ export class FilePage implements OnInit {
 
   clickShare(f) {
     if(this.platformType === "android") {
-      this.manage.shareNative(f);
+      this.manage.shareNative(f, f.url);
     } else {
-      this.clipboardApi.copyFromContent(f);
+      this.clipboardApi.copyFromContent(f.url);
+      this.notifyService.showInfo("Copied to clipboard", "This file's url is now copied at your clipboard");
     }
   }
 }

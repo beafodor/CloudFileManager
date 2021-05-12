@@ -99,7 +99,39 @@ export class UploadService {
         await this.uploadToFirebase(fileBlob, aF);
       });
     }).catch((error) => console.log(error));
+  }
 
+  async choosePhoto(uid) {
+    this.fileChooser.open({'mime': 'image/jpeg'}).then(uri => {
+      this.filePath.resolveNativePath(uri).then(async newRes => {
+        const fileBlob = await this.makeFileIntoBlob(newRes);
+        await this.uploadToFirebasePhoto(fileBlob, uid);
+      });
+    }).catch((error) => console.log(error));
+  }
+
+  async uploadToFirebasePhoto(f, uid) {
+    const path = '/profilePics/' + uid + '.jpg';
+    const ref = this.storage.ref(path);
+
+    this.storage.upload(path, f.imgBlob);
+    this.downloadURL = await ref.getDownloadURL().toString();
+
+    this.db.doc(`profile/${uid}`).set({
+      photoURL: await this.downloadURL
+    });
+  }
+
+  async uploadToFirebasePhotoWeb(f, uid) {
+    const path = '/profilePics/' + uid + '.jpg';
+    const ref = this.storage.ref(path);
+
+    this.storage.upload(path, f);
+    await ref.getDownloadURL().subscribe(res => {
+      this.db.doc(`profile/${uid}`).update({
+        photoURL: res.toString()
+      })
+    });
   }
 
   uploadToFirebase(f, aF) {

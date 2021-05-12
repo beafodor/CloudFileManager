@@ -8,8 +8,6 @@ import { Observable } from 'rxjs';
 })
 export class AuthGuard implements CanActivate {
 
-  loggedIn = false;
-
   constructor(private router: Router, private nativeStorage: NativeStorage) {}
 
   canActivate(

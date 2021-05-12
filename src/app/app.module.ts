@@ -33,6 +33,9 @@ import { LoginGuard } from './guards/loginGuard/login.guard';
 import { LoginService } from './services/login/login.service';
 import { PlatformService } from './services/platform/platform.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { NotificationsService } from './services/notifications/notifications.service';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCf2CTexFB3vSeKINeMjbWSmwCuseCQPMc",
@@ -47,7 +50,7 @@ export const firebaseConfig = {
 @NgModule({
   declarations: [AppComponent, ToolbarComponent, SidebarComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(),
+  imports: [BrowserModule, BrowserAnimationsModule, ToastrModule.forRoot(), IonicModule.forRoot(),
     HttpClientModule, AngularFireModule, AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule, AngularFireStorageModule, AngularFirestoreModule, FormsModule, ReactiveFormsModule, AppRoutingModule, ClipboardModule],
   providers: [
@@ -66,7 +69,8 @@ export const firebaseConfig = {
     GooglePlus,
     Clipboard,
     FileTransfer,
-    NativeStorage
+    NativeStorage,
+    NotificationsService
   ],
   bootstrap: [AppComponent],
 })
