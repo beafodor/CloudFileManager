@@ -7,6 +7,11 @@
             <ion-avatar>
               <ion-img [src]="searchedUser.photoURL" onerror="this.onerror=null;this.src='assets/user.png'"></ion-img>
             </ion-avatar>
+            <ion-buttons class="shareProfile">
+              <ion-button slot="end">
+                <ion-icon name="share-social"></ion-icon>
+              </ion-button>
+            </ion-buttons>
             <h2>{{ searchedUser.username }}</h2>
             <h3>{{ searchedUser.email }}</h3>
           </ion-card-content>
@@ -16,7 +21,7 @@
     <div *ngIf="(loggedinUser && searchedUser.isPublic) || loggedinUser === searchedUser.uid">
       <ion-row justify-content-center align-items-center style="height: 80%" class="profile-content">
         <ion-col style="width: 600px;">
-          <ion-card>
+          <ion-card style="margin-top: 20px;">
             <ion-card-header>
               <ion-card-title><ion-icon name="stats-chart"></ion-icon>Statistics</ion-card-title>
             </ion-card-header>
@@ -25,13 +30,13 @@
                 Total number of {{ searchedUser.username }}'s public files: {{ publicFiles.length }}
               </ion-item>
               <ion-item>
-                Total MB of {{ searchedUser.username }}'s public files: MB
+                Total MB of {{ searchedUser.username }}'s public files: 3.48 MB
               </ion-item>
             </ion-card-content>
           </ion-card>
         </ion-col>
         <ion-col style="width: 600px;">
-          <ion-card>
+          <ion-card style="margin-top: 20px;">
             <ion-card-header>
               <ion-card-title><ion-icon name="document"></ion-icon>{{ searchedUser.username }}'s public files</ion-card-title>
             </ion-card-header>
@@ -66,11 +71,10 @@
                     <ion-item-option color="primary">
                       <ion-icon name="cloud-download-outline" slot="icon-only"></ion-icon>
                     </ion-item-option>
+                    <ion-item-option side="end" (click)='clickShare(file)'>
+                      <ion-icon name="share-social" slot="icon-only"></ion-icon>
+                    </ion-item-option>
                   </ion-item-options>
-
-                  <ion-item-option side="end" (click)='clickShare(file)'>
-                    <ion-icon name="share-social" slot="icon-only"></ion-icon>
-                  </ion-item-option>
                 </ion-item-sliding>
               </div>
             </ion-card-content>
