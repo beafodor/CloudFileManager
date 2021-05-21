@@ -83,6 +83,7 @@ export class AuthService {
   async signOut() {
     await this.fbAuth.signOut();
     localStorage.clear();
+    this.nativeStorage.clear();
     return this.router.navigate(['login']);
   }
 

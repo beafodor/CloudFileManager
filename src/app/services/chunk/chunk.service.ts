@@ -14,8 +14,8 @@ export class ChunkService {
   calculateSize(file): Promise<any> {
     let chunkSize = 1024 * 1024;
     return new Promise(async (resolve, reject) => {
-      this.binary = await file.file.arrayBuffer();
-      let fileSize: number = file.file.size;
+      this.binary = await file.arrayBuffer();
+      let fileSize: number = file.size;
       this.chunks = [];
       this.chunkSizes = [];
 

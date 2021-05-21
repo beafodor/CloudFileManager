@@ -72,21 +72,34 @@ export class ManageService {
     await alert.present();
   }
 
-  shareNative(f, url) {
+  async shareNative(f, url) {
     this.clipboard.clear();
+    let toastMsg;
     if(f.isPublic) {
       this.clipboard.copy(url);
-      this.toast.create({
+      toastMsg = this.toast.create({
         message: "This file's download url copied to clipboard",
         duration: 3000,
         position: 'bottom'
       });
     } else {
-      this.toast.create({
+      toastMsg = this.toast.create({
         message: "This file' is private. Please, check the file's privacy settings!",
         duration: 3000,
         position: 'bottom'
       });
     }
+    return (await toastMsg).present();
+  }
+
+  async shareNativeProfile(str) {
+    this.clipboard.clear();
+    this.clipboard.copy(str);
+    const toastMsg = this.toast.create({
+      message: "This profile's url copied to clipboard",
+      duration: 3000,
+      position: 'bottom'
+    });
+    return (await toastMsg).present();
   }
 }

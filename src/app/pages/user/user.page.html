@@ -8,7 +8,7 @@
               <ion-img [src]="searchedUser.photoURL" onerror="this.onerror=null;this.src='assets/user.png'"></ion-img>
             </ion-avatar>
             <ion-buttons class="shareProfile">
-              <ion-button slot="end">
+              <ion-button slot="end" (click)="clickProfileShare()">
                 <ion-icon name="share-social"></ion-icon>
               </ion-button>
             </ion-buttons>

@@ -94,9 +94,9 @@ export class UploadService {
   //upload file from native app
   async chooseFile(aF) {
     this.fileChooser.open().then(async uri => {
-      this.filePath.resolveNativePath(uri).then(async newRes => {
-        const fileBlob = await this.makeFileIntoBlob(newRes);
-        await this.uploadToFirebase(fileBlob, aF);
+      this.filePath.resolveNativePath(uri).then(async res => {
+        const fileBlob = await this.makeFileIntoBlob(res);
+        this.uploadToFirebase(fileBlob, aF);
       });
     }).catch((error) => console.log(error));
   }
@@ -157,15 +157,30 @@ export class UploadService {
     );
   }
 
-  makeFileIntoBlob(_imagePath) {
+  /*uploadBlobToFirebase(f, aF) {
+    this.uid = this.auth.getCurrentUsedId();
+    this.isOn = true;
+    let index = 0;
+
+    this.chunkService.calculateSize(f).then(res => {
+      res.forEach(chunk => {
+        let path = location + '/$' + index + '$' + name;
+        let uint8 = new Uint8Array(chunk);
+        let blob = new Blob([uint8.buffer]);
+
+        this.currentTask = this.storage.upload(path, chunk);
+        index++;
+      });
+    });
+  }*/
+
+  makeFileIntoBlob(_filePath) {
     return new Promise((resolve, reject) => {
       let fileName = "";
       let fileType = "";
       this.file
-        .resolveLocalFilesystemUrl(_imagePath)
-        .then(fileEntry => {
+        .resolveLocalFilesystemUrl(_filePath).then(fileEntry => {
           let { name, nativeURL } = fileEntry;
-
           let path = nativeURL.substring(0, nativeURL.lastIndexOf("/"));
           fileName = name;
           fileType = this.getFileType(name);
@@ -173,16 +188,10 @@ export class UploadService {
           return this.file.readAsArrayBuffer(path, name);
         })
         .then(buffer => {
-          console.log(buffer)
-          console.log(buffer)
-          let imgBlob = new Blob([buffer], {
+          let fileBlob = new Blob([buffer], {
             type: fileType
           });
-
-          resolve({
-            fileName,
-            imgBlob
-          });
+          resolve({fileName, fileBlob});
         })
         .catch(e => console.log(e));
     });

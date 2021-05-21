@@ -10,6 +10,7 @@ import { ManageService } from 'src/app/services/manage/manage.service';
 import { PlatformService } from 'src/app/services/platform/platform.service';
 import { ClipboardService } from 'ngx-clipboard';
 import { DownloadService } from 'src/app/services/download/download.service';
+import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 
 @Component({
   selector: 'app-user',
@@ -34,7 +35,8 @@ export class UserPage implements OnInit {
     public manage: ManageService,
     public platform: PlatformService,
     private clipboardApi: ClipboardService,
-    public download: DownloadService
+    public download: DownloadService,
+    public notifyService: NotificationsService
   ) { }
 
   ngOnInit() {
@@ -65,6 +67,7 @@ export class UserPage implements OnInit {
       this.manage.shareNative(f, f.downloadURL);
     } else {
       this.clipboardApi.copyFromContent(f.downloadURL);
+      this.notifyService.showInfo("Copied to clipboard", "This file's url is now copied at your clipboard");
     }
   }
 
@@ -73,10 +76,20 @@ export class UserPage implements OnInit {
   }
 
   clickDownload(f) {
-    this.download.downloadFile(f.downloadURL);
+    this.download.downloadFile(f.downloadURL, f.name);
   }
 
   setUserMail() {
     this.emailString = "mailto:" + this.searchedUser.email + "com?Subject=ProfilePrivacy&body=Want%20Your%20Profile%20To%20Be%20Public";
+  }
+
+  clickProfileShare() {
+    const url = window.location.href;
+    if(this.platformType === "android") {
+      this.manage.shareNativeProfile(url);
+    } else {
+      this.clipboardApi.copyFromContent(url);
+      this.notifyService.showInfo("Copied to clipboard", "This profile's url is now copied at your clipboard");
+    }
   }
 }

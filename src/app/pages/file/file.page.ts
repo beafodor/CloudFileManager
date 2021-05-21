@@ -147,7 +147,7 @@ export class FilePage implements OnInit {
       this.currentUpload = new Upload(files[idx]);
       this.currentName = files[idx].name;
 
-      this.chunk.calculateSize(this.currentUpload).then(res => {
+      this.chunk.calculateSize(this.currentUpload.file).then(res => {
         // upload chunks
         let index = 0;
         res.forEach(chunk => {
@@ -217,7 +217,7 @@ export class FilePage implements OnInit {
   }
 
   async clickDownload(f) {
-    await this.download.downloadFile(f.url);
+    await this.download.downloadFile(f.url, f.name);
   }
 
   //nav back between folders
@@ -250,7 +250,7 @@ export class FilePage implements OnInit {
             text: 'Download',
             cssClass: 'secondary',
             handler: () => {
-              this.download.downloadFile(f.url);
+              this.download.downloadFile(f.url, f.name);
             }
           },
           {

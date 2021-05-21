@@ -17,6 +17,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { ClipboardModule } from 'ngx-clipboard';
@@ -36,6 +37,7 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { NotificationsService } from './services/notifications/notifications.service';
+import { DownloadService } from './services/download/download.service';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCf2CTexFB3vSeKINeMjbWSmwCuseCQPMc",
@@ -66,11 +68,13 @@ export const firebaseConfig = {
     FileChooser,
     FilePath,
     File,
+    FileOpener,
     GooglePlus,
     Clipboard,
     FileTransfer,
     NativeStorage,
-    NotificationsService
+    NotificationsService,
+    DownloadService
   ],
   bootstrap: [AppComponent],
 })
