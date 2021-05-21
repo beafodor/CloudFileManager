@@ -2,13 +2,17 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { Observable } from 'rxjs';
+import { SidebarComponent } from 'src/app/components/sidebar/sidebar.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private router: Router, private nativeStorage: NativeStorage) {}
+  constructor(
+    private router: Router,
+    private nativeStorage: NativeStorage
+    ) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,

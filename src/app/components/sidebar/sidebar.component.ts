@@ -29,6 +29,7 @@ export class SidebarComponent implements OnInit {
   async getActive() {
     await this.router.events.subscribe((event: RouterEvent) => {
       this.selectedPath = event.url;
+      this.uid = this.auth.getCurrentUsedId();
       this.getItems();
     });
   }

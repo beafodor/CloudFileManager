@@ -64,6 +64,10 @@ export class FilePage implements OnInit {
     }
   }
 
+  addStyle() {
+    if(this.platformType === 'desktop') document.getElementById("grid").style.display = "flex";
+  }
+
   //load files and directories
   async loadFiles() {
     this.cloudFiles = [];
@@ -96,6 +100,7 @@ export class FilePage implements OnInit {
     }, (e) => {console.log(e)});
 
     this.fileSort();
+    this.addStyle();
   }
 
   fileSort() {

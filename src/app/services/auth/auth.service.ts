@@ -82,8 +82,8 @@ export class AuthService {
   //signOut and navigate back to login
   async signOut() {
     await this.fbAuth.signOut();
-    localStorage.clear();
-    this.nativeStorage.clear();
+    await localStorage.clear();
+    if(this.platform.is('android')) await this.nativeStorage.clear();
     return this.router.navigate(['login']);
   }
 
